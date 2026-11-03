@@ -4,6 +4,7 @@ struct MultiPaneView: View {
     @State private var panes: [PaneState] = [PaneState()]
     @State private var activePaneIndex: Int = 0
     @State private var showingFavorites = true
+    @State private var keyMonitor: Any? = nil
 
     let maxPanes = 4
 
@@ -16,6 +17,13 @@ struct MultiPaneView: View {
             }
             Divider()
             panesView
+        }
+        .onAppear { installKeyMonitor() }
+        .onDisappear {
+            if let monitor = keyMonitor {
+                NSEvent.removeMonitor(monitor)
+                keyMonitor = nil
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .setPaneCount)) { notification in
             if let count = notification.object as? Int {
@@ -119,16 +127,44 @@ struct MultiPaneView: View {
                         pane: pane,
                         paneIndex: index,
                         totalPanes: panes.count,
+                        isActive: index == activePaneIndex,
+                        onActivate: { activePaneIndex = index },
                         onDrop: { items, targetPane in
                             drop(items: items, into: targetPane)
-                        },
-                        onOpenPane: { _ in }
+                        }
                     )
                     .frame(minWidth: 320)
                     if index < panes.count - 1 {
                         Divider()
                     }
                 }
+            }
+        }
+    }
+
+    private func installKeyMonitor() {
+        guard keyMonitor == nil else { return }
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self else { return event }
+            guard self.activePaneIndex < self.panes.count else { return event }
+            let pane = self.panes[self.activePaneIndex]
+            let items = pane.filteredItems
+            switch event.keyCode {
+            case 126 where !items.isEmpty: // up arrow
+                let current = items.firstIndex { pane.selectedItems.contains($0.id) } ?? items.count
+                let newIndex = min(max(current - 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
+                return nil
+            case 125 where !items.isEmpty: // down arrow
+                let current = items.firstIndex { pane.selectedItems.contains($0.id) } ?? -1
+                let newIndex = min(max(current + 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
+                return nil
+            case 36, 76: // return / enter
+                pane.openSelected()
+                return nil
+            default:
+                return event
             }
         }
     }

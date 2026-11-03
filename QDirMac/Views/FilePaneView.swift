@@ -5,12 +5,11 @@ struct FilePaneView: View {
     @Bindable var pane: PaneState
     let paneIndex: Int
     let totalPanes: Int
+    let isActive: Bool
+    let onActivate: () -> Void
     let onDrop: ([FileItem], PaneState) -> Void
-    let onOpenPane: (Int) -> Void
 
     @State private var isTargeted = false
-    @State private var keyboardActive = false
-    @State private var keyMonitor: Any? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,54 +19,19 @@ struct FilePaneView: View {
             Divider()
             paneFooter
         }
-        .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
-        .onTapGesture { activateKeyboard() }
-        .onAppear { activateKeyboard() }
-        .onDisappear {
-            if let monitor = keyMonitor {
-                NSEvent.removeMonitor(monitor)
-                keyMonitor = nil
-            }
-        }
+        .background(isActive ? Color.accentColor.opacity(0.06) : (isTargeted ? Color.accentColor.opacity(0.1) : Color.clear))
+        .overlay(
+            RoundedRectangle(cornerRadius: 2)
+                .stroke(isActive ? Color.accentColor : Color.clear, lineWidth: 1.5)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture { onActivate() }
         .dropDestination(for: URL.self, action: { urls, _ in
             handleDrop(urls: urls)
             return true
         }, isTargeted: { targeted in
             isTargeted = targeted
         })
-    }
-
-    private func activateKeyboard() {
-        guard keyMonitor == nil else { return }
-        keyboardActive = true
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [pane] event in
-            let items = pane.filteredItems
-            guard !items.isEmpty else { return event }
-            let currentIndex = items.firstIndex { pane.selectedItems.contains($0.id) } ?? (event.keyCode == 125 ? -1 : items.count)
-            switch event.keyCode {
-            case 126: // up arrow
-                let newIndex = min(max(currentIndex - 1, 0), items.count - 1)
-                pane.selectedItems = [items[newIndex].id]
-                return nil
-            case 125: // down arrow
-                let newIndex = min(max(currentIndex + 1, 0), items.count - 1)
-                pane.selectedItems = [items[newIndex].id]
-                return nil
-            case 36, 76: // return / enter
-                pane.openSelected()
-                return nil
-            default:
-                return event
-            }
-        }
-    }
-
-    private func moveSelection(delta: Int) {
-        let items = pane.filteredItems
-        guard !items.isEmpty else { return }
-        let currentIndex = items.firstIndex { pane.selectedItems.contains($0.id) } ?? (delta > 0 ? -1 : items.count)
-        let newIndex = min(max(currentIndex + delta, 0), items.count - 1)
-        pane.selectedItems = [items[newIndex].id]
     }
 
     private var paneHeader: some View {
@@ -176,7 +140,7 @@ struct FilePaneView: View {
                                     pane.toggleSelection(for: item.id)
                                 } else {
                                     pane.selectedItems = [item.id]
-                                    keyboardActive = true
+                                    onActivate()
                                 }
                             }
                             .contextMenu {
