@@ -14,24 +14,24 @@ struct FileRowView: View {
                     .lineLimit(1)
                     .truncationMode(.middle)
             }
-            .frame(width: 280, alignment: .leading)
+            .frame(minWidth: 120, maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 8)
 
             Text(item.formattedSize)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(width: 90, alignment: .trailing)
+                .frame(width: 80, alignment: .trailing)
 
             Text(item.formattedDate)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(width: 150, alignment: .leading)
+                .frame(width: 140, alignment: .leading)
                 .padding(.leading, 8)
 
             Text(item.kind)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(width: 100, alignment: .leading)
+                .frame(width: 90, alignment: .leading)
                 .lineLimit(1)
         }
         .font(.system(size: 12))

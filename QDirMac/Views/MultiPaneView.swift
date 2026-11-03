@@ -1,13 +1,33 @@
 import SwiftUI
 
+final class KeyboardCoordinator {
+    var panes: [PaneState] = []
+    var activePaneIndex: Int = 0
+}
+
 struct MultiPaneView: View {
     @State private var panes: [PaneState] = [PaneState()]
     @State private var activePaneIndex: Int = 0
     @State private var showingFavorites = true
+    @State private var keyMonitor: Any? = nil
+    private let coordinator = KeyboardCoordinator()
 
     let maxPanes = 4
 
     var body: some View {
+        mainContent
+            .onAppear { installKeyMonitor() }
+            .onChange(of: panes.count) { _ in coordinator.panes = panes }
+            .onChange(of: activePaneIndex) { _, newIndex in coordinator.activePaneIndex = newIndex }
+            .onDisappear {
+                if let monitor = keyMonitor {
+                    NSEvent.removeMonitor(monitor)
+                    keyMonitor = nil
+                }
+            }
+    }
+
+    private var mainContent: some View {
         VStack(spacing: 0) {
             toolbar
             if showingFavorites {
@@ -112,21 +132,52 @@ struct MultiPaneView: View {
     }
 
     private var panesView: some View {
-        HStack(spacing: 0) {
-            ForEach(Array(panes.enumerated()), id: \.element.id) { index, pane in
-                FilePaneView(
-                    pane: pane,
-                    paneIndex: index,
-                    totalPanes: panes.count,
-                    onDrop: { items, targetPane in
-                        drop(items: items, into: targetPane)
-                    },
-                    onOpenPane: { _ in }
-                )
-                .frame(minWidth: 200)
-                if index < panes.count - 1 {
-                    Divider()
+        ScrollView(.horizontal, showsIndicators: true) {
+            HStack(spacing: 0) {
+                ForEach(Array(panes.enumerated()), id: \.element.id) { index, pane in
+                    FilePaneView(
+                        pane: pane,
+                        paneIndex: index,
+                        totalPanes: panes.count,
+                        isActive: index == activePaneIndex,
+                        onActivate: { activePaneIndex = index },
+                        onDrop: { items, targetPane in
+                            drop(items: items, into: targetPane)
+                        }
+                    )
+                    .frame(minWidth: 320)
+                    if index < panes.count - 1 {
+                        Divider()
+                    }
                 }
+            }
+        }
+    }
+
+    private func installKeyMonitor() {
+        guard keyMonitor == nil else { return }
+        coordinator.panes = panes
+        coordinator.activePaneIndex = activePaneIndex
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [coordinator] event in
+            guard coordinator.activePaneIndex < coordinator.panes.count else { return event }
+            let pane = coordinator.panes[coordinator.activePaneIndex]
+            let items = pane.filteredItems
+            switch event.keyCode {
+            case 126 where !items.isEmpty: // up arrow
+                let current = items.firstIndex { pane.selectedItems.contains($0.id) } ?? items.count
+                let newIndex = min(max(current - 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
+                return nil
+            case 125 where !items.isEmpty: // down arrow
+                let current = items.firstIndex { pane.selectedItems.contains($0.id) } ?? -1
+                let newIndex = min(max(current + 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
+                return nil
+            case 36, 76: // return / enter
+                pane.openSelected()
+                return nil
+            default:
+                return event
             }
         }
     }
@@ -184,3 +235,4 @@ struct MultiPaneView: View {
         }
     }
 }
+

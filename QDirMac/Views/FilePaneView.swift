@@ -5,11 +5,11 @@ struct FilePaneView: View {
     @Bindable var pane: PaneState
     let paneIndex: Int
     let totalPanes: Int
+    let isActive: Bool
+    let onActivate: () -> Void
     let onDrop: ([FileItem], PaneState) -> Void
-    let onOpenPane: (Int) -> Void
 
     @State private var isTargeted = false
-    @State private var columnWidths: [CGFloat] = [280, 90, 150, 100]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -19,7 +19,13 @@ struct FilePaneView: View {
             Divider()
             paneFooter
         }
-        .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
+        .background(isActive ? Color.accentColor.opacity(0.06) : (isTargeted ? Color.accentColor.opacity(0.1) : Color.clear))
+        .overlay(
+            RoundedRectangle(cornerRadius: 2)
+                .stroke(isActive ? Color.accentColor : Color.clear, lineWidth: 1.5)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture { onActivate() }
         .dropDestination(for: URL.self, action: { urls, _ in
             handleDrop(urls: urls)
             return true
@@ -104,50 +110,61 @@ struct FilePaneView: View {
     }
 
     private var fileList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                columnHeader
-                Divider()
-                if pane.isLoading {
-                    ProgressView()
-                        .padding()
-                } else if pane.filteredItems.isEmpty {
-                    emptyState
-                } else {
-                    ForEach(pane.filteredItems) { item in
-                        FileRowView(
-                            item: item,
-                            isSelected: pane.selectedItems.contains(item.id)
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture(count: 2) {
-                            if item.isDirectory {
-                                pane.navigate(to: item.url)
-                            } else {
-                                NSWorkspace.shared.open(item.url)
+        ScrollViewReader { proxy in
+            ScrollView(.vertical, showsIndicators: true) {
+                LazyVStack(spacing: 0) {
+                    columnHeader
+                    Divider()
+                    if pane.isLoading {
+                        ProgressView()
+                            .padding()
+                    } else if pane.filteredItems.isEmpty {
+                        emptyState
+                    } else {
+                        ForEach(pane.filteredItems) { item in
+                            FileRowView(
+                                item: item,
+                                isSelected: pane.selectedItems.contains(item.id)
+                            )
+                            .id(item.id)
+                            .contentShape(Rectangle())
+                            .onTapGesture(count: 2) {
+                                if item.isDirectory {
+                                    pane.navigate(to: item.url)
+                                } else {
+                                    NSWorkspace.shared.open(item.url)
+                                }
                             }
-                        }
-                        .onTapGesture {
-                            if NSEvent.modifierFlags.contains(.command) {
-                                pane.toggleSelection(for: item.id)
-                            } else {
-                                pane.selectedItems = [item.id]
+                            .onTapGesture {
+                                if NSEvent.modifierFlags.contains(.command) {
+                                    pane.toggleSelection(for: item.id)
+                                } else {
+                                    pane.selectedItems = [item.id]
+                                    onActivate()
+                                }
                             }
-                        }
-                        .contextMenu {
-                            fileContextMenu(for: item)
-                        }
-                        .draggable(item.url) {
-                            HStack(spacing: 4) {
-                                Image(systemName: item.icon)
-                                    .foregroundStyle(item.iconColor)
-                                Text(item.name)
+                            .contextMenu {
+                                fileContextMenu(for: item)
                             }
-                            .padding(4)
-                            .background(.ultraThinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                            .draggable(item.url) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: item.icon)
+                                        .foregroundStyle(item.iconColor)
+                                    Text(item.name)
+                                }
+                                .padding(4)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
+                            Divider()
                         }
-                        Divider()
+                    }
+                }
+            }
+            .onChange(of: pane.selectedItems) { _, newSelection in
+                if let selectedId = newSelection.first {
+                    withAnimation(.easeOut(duration: 0.15)) {
+                        proxy.scrollTo(selectedId, anchor: .center)
                     }
                 }
             }
@@ -156,34 +173,50 @@ struct FilePaneView: View {
 
     private var columnHeader: some View {
         HStack(spacing: 0) {
-            ForEach(Array(SortColumn.allCases.enumerated()), id: \.element) { index, column in
-                Button(action: {
-                    if pane.sortColumn == column {
-                        pane.sortOrder = pane.sortOrder == .ascending ? .descending : .ascending
-                    } else {
-                        pane.sortColumn = column
-                        pane.sortOrder = .ascending
-                    }
-                }) {
-                    HStack(spacing: 4) {
-                        Text(column.rawValue)
-                        if pane.sortColumn == column {
-                            Image(systemName: pane.sortOrder == .ascending ? "chevron.up" : "chevron.down")
-                                .font(.system(size: 8))
-                        }
-                    }
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(pane.sortColumn == column ? .primary : .secondary)
-                    .frame(width: columnWidths[index], alignment: .leading)
-                    .padding(.leading, 8)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+            Button(action: { toggleSort(.name) }) {
+                headerLabel(.name, flexible: true)
             }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.size) }) {
+                headerLabel(.size, width: 80, alignment: .trailing)
+            }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.date) }) {
+                headerLabel(.date, width: 140)
+            }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.kind) }) {
+                headerLabel(.kind, width: 90)
+            }
+            .buttonStyle(.plain)
         }
         .padding(.vertical, 4)
         .background(Color(nsColor: .windowBackgroundColor))
+    }
+
+    private func toggleSort(_ column: SortColumn) {
+        if pane.sortColumn == column {
+            pane.sortOrder = pane.sortOrder == .ascending ? .descending : .ascending
+        } else {
+            pane.sortColumn = column
+            pane.sortOrder = .ascending
+        }
+    }
+
+    private func headerLabel(_ column: SortColumn, width: CGFloat? = nil, flexible: Bool = false, alignment: Alignment = .leading) -> some View {
+        HStack(spacing: 4) {
+            Text(column.rawValue)
+            if pane.sortColumn == column {
+                Image(systemName: pane.sortOrder == .ascending ? "chevron.up" : "chevron.down")
+                    .font(.system(size: 8))
+            }
+        }
+        .font(.caption)
+        .fontWeight(.semibold)
+        .foregroundStyle(pane.sortColumn == column ? .primary : .secondary)
+        .frame(minWidth: width ?? 120, maxWidth: flexible ? .infinity : width, alignment: alignment)
+        .padding(.leading, 8)
+        .contentShape(Rectangle())
     }
 
     private var emptyState: some View {
@@ -205,7 +238,7 @@ struct FilePaneView: View {
             if !pane.selectedItems.isEmpty {
                 Text("• \(pane.selectedItems.count) ausgewählt")
                     .font(.caption)
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             }
             Spacer()
             Text("Spalte \(paneIndex + 1) von \(totalPanes)")
@@ -218,7 +251,7 @@ struct FilePaneView: View {
     }
 
     private func handleDrop(urls: [URL]) {
-        let droppedItems = urls.compactMap { try? FileItem(url: $0) }
+        let droppedItems = urls.compactMap { FileItem(url: $0) }
         onDrop(droppedItems, pane)
     }
 

@@ -1,4 +1,8 @@
 import Foundation
+import Observation
+#if canImport(AppKit)
+import AppKit
+#endif
 
 @Observable
 final class PaneState: Identifiable {
@@ -45,9 +49,7 @@ final class PaneState: Identifiable {
 
             var fileItems: [FileItem] = []
             for fileURL in urls {
-                if let item = try? FileItem(url: fileURL) {
-                    fileItems.append(item)
-                }
+                fileItems.append(FileItem(url: fileURL))
             }
 
             DispatchQueue.main.async {
