@@ -1,10 +1,16 @@
 import SwiftUI
 
+final class KeyboardCoordinator {
+    var panes: [PaneState] = []
+    var activePaneIndex: Int = 0
+}
+
 struct MultiPaneView: View {
     @State private var panes: [PaneState] = [PaneState()]
     @State private var activePaneIndex: Int = 0
     @State private var showingFavorites = true
     @State private var keyMonitor: Any? = nil
+    private let coordinator = KeyboardCoordinator()
 
     let maxPanes = 4
 
@@ -19,6 +25,8 @@ struct MultiPaneView: View {
             panesView
         }
         .onAppear { installKeyMonitor() }
+        .onChange(of: panes) { _, newPanes in coordinator.panes = newPanes }
+        .onChange(of: activePaneIndex) { _, newIndex in coordinator.activePaneIndex = newIndex }
         .onDisappear {
             if let monitor = keyMonitor {
                 NSEvent.removeMonitor(monitor)
@@ -144,10 +152,11 @@ struct MultiPaneView: View {
 
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self else { return event }
-            guard self.activePaneIndex < self.panes.count else { return event }
-            let pane = self.panes[self.activePaneIndex]
+        coordinator.panes = panes
+        coordinator.activePaneIndex = activePaneIndex
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [coordinator] event in
+            guard coordinator.activePaneIndex < coordinator.panes.count else { return event }
+            let pane = coordinator.panes[coordinator.activePaneIndex]
             let items = pane.filteredItems
             switch event.keyCode {
             case 126 where !items.isEmpty: // up arrow
