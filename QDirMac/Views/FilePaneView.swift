@@ -205,7 +205,7 @@ struct FilePaneView: View {
             if !pane.selectedItems.isEmpty {
                 Text("• \(pane.selectedItems.count) ausgewählt")
                     .font(.caption)
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             }
             Spacer()
             Text("Spalte \(paneIndex + 1) von \(totalPanes)")

@@ -9,7 +9,6 @@ struct QDirMacApp: App {
             ContentView()
                 .frame(minWidth: 800, minHeight: 500)
         }
-        .windowStyle(.titled)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("Neues Fenster") {
@@ -58,10 +57,6 @@ struct QDirMacApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        NSWindow.allowNonActivePanelActivation()
-    }
-
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         true
     }

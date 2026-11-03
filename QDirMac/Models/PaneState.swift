@@ -1,5 +1,8 @@
 import Foundation
 import Observation
+#if canImport(AppKit)
+import AppKit
+#endif
 
 @Observable
 final class PaneState: Identifiable {
