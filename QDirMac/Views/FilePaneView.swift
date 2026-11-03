@@ -9,7 +9,8 @@ struct FilePaneView: View {
     let onOpenPane: (Int) -> Void
 
     @State private var isTargeted = false
-    @FocusState private var isFocused: Bool
+    @State private var keyboardActive = false
+    @State private var keyMonitor: Any? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,13 +21,14 @@ struct FilePaneView: View {
             paneFooter
         }
         .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
-        .focusable()
-        .focused($isFocused)
-        .onTapGesture { isFocused = true }
-        .onKeyPress { press in
-            handleKeyPress(press)
+        .onTapGesture { activateKeyboard() }
+        .onAppear { activateKeyboard() }
+        .onDisappear {
+            if let monitor = keyMonitor {
+                NSEvent.removeMonitor(monitor)
+                keyMonitor = nil
+            }
         }
-        .onAppear { isFocused = true }
         .dropDestination(for: URL.self, action: { urls, _ in
             handleDrop(urls: urls)
             return true
@@ -35,31 +37,33 @@ struct FilePaneView: View {
         })
     }
 
-    private func handleKeyPress(_ press: KeyPress) -> KeyPress.Result {
-        let items = pane.filteredItems
-        guard !items.isEmpty else { return .ignored }
-        let currentIndex: Int = items.firstIndex { pane.selectedItems.contains($0.id) } ?? -1
-        switch press.key {
-        case .upArrow:
-            let newIndex = max(0, currentIndex - 1)
-            selectItem(at: newIndex, items: items)
-            return .handled
-        case .downArrow:
-            let newIndex = min(items.count - 1, currentIndex + 1)
-            selectItem(at: newIndex, items: items)
-            return .handled
-        case .return:
-            pane.openSelected()
-            return .handled
-        default:
-            return .ignored
+    private func activateKeyboard() {
+        guard keyMonitor == nil else { return }
+        keyboardActive = true
+        keyMonitor = NSEvent.addLocalMonitorForEvents(mask: .keyDown) { [weak self] event in
+            guard let self, self.keyboardActive else { return event }
+            switch event.keyCode {
+            case 126: // up arrow
+                moveSelection(delta: -1)
+                return nil
+            case 125: // down arrow
+                moveSelection(delta: 1)
+                return nil
+            case 36, 76: // return / enter
+                self.pane.openSelected()
+                return nil
+            default:
+                return event
+            }
         }
     }
 
-    private func selectItem(at index: Int, items: [FileItem]) {
-        guard index >= 0, index < items.count else { return }
-        pane.selectedItems = [items[index].id]
-        isFocused = true
+    private func moveSelection(delta: Int) {
+        let items = pane.filteredItems
+        guard !items.isEmpty else { return }
+        let currentIndex = items.firstIndex { pane.selectedItems.contains($0.id) } ?? (delta > 0 ? -1 : items.count)
+        let newIndex = min(max(currentIndex + delta, 0), items.count - 1)
+        pane.selectedItems = [items[newIndex].id]
     }
 
     private var paneHeader: some View {
@@ -168,7 +172,7 @@ struct FilePaneView: View {
                                     pane.toggleSelection(for: item.id)
                                 } else {
                                     pane.selectedItems = [item.id]
-                                    isFocused = true
+                                    keyboardActive = true
                                 }
                             }
                             .contextMenu {
