@@ -40,17 +40,21 @@ struct FilePaneView: View {
     private func activateKeyboard() {
         guard keyMonitor == nil else { return }
         keyboardActive = true
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self, self.keyboardActive else { return event }
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [pane] event in
+            let items = pane.filteredItems
+            guard !items.isEmpty else { return event }
+            let currentIndex = items.firstIndex { pane.selectedItems.contains($0.id) } ?? (event.keyCode == 125 ? -1 : items.count)
             switch event.keyCode {
             case 126: // up arrow
-                moveSelection(delta: -1)
+                let newIndex = min(max(currentIndex - 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
                 return nil
             case 125: // down arrow
-                moveSelection(delta: 1)
+                let newIndex = min(max(currentIndex + 1, 0), items.count - 1)
+                pane.selectedItems = [items[newIndex].id]
                 return nil
             case 36, 76: // return / enter
-                self.pane.openSelected()
+                pane.openSelected()
                 return nil
             default:
                 return event
