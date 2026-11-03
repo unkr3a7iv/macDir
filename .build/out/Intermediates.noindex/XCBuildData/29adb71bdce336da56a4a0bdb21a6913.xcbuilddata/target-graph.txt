@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'QDirMac-product' in project 'QDirMac'
+➜ Explicit dependency on target 'QDirMac_QDirMac' in project 'QDirMac'
+Target 'QDirMac_QDirMac' in project 'QDirMac' (no dependencies)

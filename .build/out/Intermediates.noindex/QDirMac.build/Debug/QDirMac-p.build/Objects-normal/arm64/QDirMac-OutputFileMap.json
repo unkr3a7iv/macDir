@@ -1,0 +1,99 @@
+{
+  "" : {
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMac-primary.dia",
+    "emit-module-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMac-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMac-primary-emit-module.dia",
+    "pch" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMac-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMac-primary.swiftdeps"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/DerivedSources/resource_bundle_accessor.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/resource_bundle_accessor~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Models/FileItem.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileItem~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Models/PaneState.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/PaneState~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/QDirMacApp.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/QDirMacApp~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Views/ContentView.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Views/FavoritesBar.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FavoritesBar~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Views/FilePaneView.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FilePaneView~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Views/FileRowView.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/FileRowView~partial.swiftmodule"
+  },
+  "/Users/sebastianbaur/Documents/GitHub/macDir/QDirMac/Views/MultiPaneView.swift" : {
+    "const-values" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.swiftconstvalues",
+    "dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.d",
+    "diagnostics" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.dia",
+    "index-unit-output-path" : "/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.o",
+    "llvm-bc" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.bc",
+    "object" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.o",
+    "swift-dependencies" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView.swiftdeps",
+    "swiftmodule" : "/Users/sebastianbaur/Documents/GitHub/macDir/.build/out/Intermediates.noindex/QDirMac.build/Debug/QDirMac-p.build/Objects-normal/arm64/MultiPaneView~partial.swiftmodule"
+  }
+}
