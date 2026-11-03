@@ -40,7 +40,7 @@ struct FilePaneView: View {
     private func activateKeyboard() {
         guard keyMonitor == nil else { return }
         keyboardActive = true
-        keyMonitor = NSEvent.addLocalMonitorForEvents(mask: .keyDown) { [weak self] event in
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self, self.keyboardActive else { return event }
             switch event.keyCode {
             case 126: // up arrow
