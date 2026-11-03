@@ -17,7 +17,7 @@ struct MultiPaneView: View {
     var body: some View {
         mainContent
             .onAppear { installKeyMonitor() }
-            .onChange(of: panes) { _, newPanes in coordinator.panes = newPanes }
+            .onChange(of: panes.count) { _ in coordinator.panes = panes }
             .onChange(of: activePaneIndex) { _, newIndex in coordinator.activePaneIndex = newIndex }
             .onDisappear {
                 if let monitor = keyMonitor {
