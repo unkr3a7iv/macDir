@@ -218,7 +218,7 @@ struct FilePaneView: View {
     }
 
     private func handleDrop(urls: [URL]) {
-        let droppedItems = urls.compactMap { try? FileItem(url: $0) }
+        let droppedItems = urls.compactMap { FileItem(url: $0) }
         onDrop(droppedItems, pane)
     }
 
