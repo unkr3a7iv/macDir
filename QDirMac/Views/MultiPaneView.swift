@@ -15,6 +15,19 @@ struct MultiPaneView: View {
     let maxPanes = 4
 
     var body: some View {
+        mainContent
+            .onAppear { installKeyMonitor() }
+            .onChange(of: panes) { _, newPanes in coordinator.panes = newPanes }
+            .onChange(of: activePaneIndex) { _, newIndex in coordinator.activePaneIndex = newIndex }
+            .onDisappear {
+                if let monitor = keyMonitor {
+                    NSEvent.removeMonitor(monitor)
+                    keyMonitor = nil
+                }
+            }
+    }
+
+    private var mainContent: some View {
         VStack(spacing: 0) {
             toolbar
             if showingFavorites {
@@ -23,15 +36,6 @@ struct MultiPaneView: View {
             }
             Divider()
             panesView
-        }
-        .onAppear { installKeyMonitor() }
-        .onChange(of: panes) { _, newPanes in coordinator.panes = newPanes }
-        .onChange(of: activePaneIndex) { _, newIndex in coordinator.activePaneIndex = newIndex }
-        .onDisappear {
-            if let monitor = keyMonitor {
-                NSEvent.removeMonitor(monitor)
-                keyMonitor = nil
-            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .setPaneCount)) { notification in
             if let count = notification.object as? Int {
@@ -231,3 +235,4 @@ struct MultiPaneView: View {
         }
     }
 }
+
