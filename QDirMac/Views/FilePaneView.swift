@@ -9,6 +9,7 @@ struct FilePaneView: View {
     let onOpenPane: (Int) -> Void
 
     @State private var isTargeted = false
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -19,12 +20,46 @@ struct FilePaneView: View {
             paneFooter
         }
         .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
+        .focusable()
+        .focused($isFocused)
+        .onTapGesture { isFocused = true }
+        .onKeyPress { press in
+            handleKeyPress(press)
+        }
+        .onAppear { isFocused = true }
         .dropDestination(for: URL.self, action: { urls, _ in
             handleDrop(urls: urls)
             return true
         }, isTargeted: { targeted in
             isTargeted = targeted
         })
+    }
+
+    private func handleKeyPress(_ press: KeyPress) -> KeyPress.Result {
+        let items = pane.filteredItems
+        guard !items.isEmpty else { return .ignored }
+        let currentIndex: Int = items.firstIndex { pane.selectedItems.contains($0.id) } ?? -1
+        switch press.key {
+        case .upArrow:
+            let newIndex = max(0, currentIndex - 1)
+            selectItem(at: newIndex, items: items)
+            return .handled
+        case .downArrow:
+            let newIndex = min(items.count - 1, currentIndex + 1)
+            selectItem(at: newIndex, items: items)
+            return .handled
+        case .return:
+            pane.openSelected()
+            return .handled
+        default:
+            return .ignored
+        }
+    }
+
+    private func selectItem(at index: Int, items: [FileItem]) {
+        guard index >= 0, index < items.count else { return }
+        pane.selectedItems = [items[index].id]
+        isFocused = true
     }
 
     private var paneHeader: some View {
@@ -103,50 +138,61 @@ struct FilePaneView: View {
     }
 
     private var fileList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                columnHeader
-                Divider()
-                if pane.isLoading {
-                    ProgressView()
-                        .padding()
-                } else if pane.filteredItems.isEmpty {
-                    emptyState
-                } else {
-                    ForEach(pane.filteredItems) { item in
-                        FileRowView(
-                            item: item,
-                            isSelected: pane.selectedItems.contains(item.id)
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture(count: 2) {
-                            if item.isDirectory {
-                                pane.navigate(to: item.url)
-                            } else {
-                                NSWorkspace.shared.open(item.url)
+        ScrollViewReader { proxy in
+            ScrollView(.vertical, showsIndicators: true) {
+                LazyVStack(spacing: 0) {
+                    columnHeader
+                    Divider()
+                    if pane.isLoading {
+                        ProgressView()
+                            .padding()
+                    } else if pane.filteredItems.isEmpty {
+                        emptyState
+                    } else {
+                        ForEach(pane.filteredItems) { item in
+                            FileRowView(
+                                item: item,
+                                isSelected: pane.selectedItems.contains(item.id)
+                            )
+                            .id(item.id)
+                            .contentShape(Rectangle())
+                            .onTapGesture(count: 2) {
+                                if item.isDirectory {
+                                    pane.navigate(to: item.url)
+                                } else {
+                                    NSWorkspace.shared.open(item.url)
+                                }
                             }
-                        }
-                        .onTapGesture {
-                            if NSEvent.modifierFlags.contains(.command) {
-                                pane.toggleSelection(for: item.id)
-                            } else {
-                                pane.selectedItems = [item.id]
+                            .onTapGesture {
+                                if NSEvent.modifierFlags.contains(.command) {
+                                    pane.toggleSelection(for: item.id)
+                                } else {
+                                    pane.selectedItems = [item.id]
+                                    isFocused = true
+                                }
                             }
-                        }
-                        .contextMenu {
-                            fileContextMenu(for: item)
-                        }
-                        .draggable(item.url) {
-                            HStack(spacing: 4) {
-                                Image(systemName: item.icon)
-                                    .foregroundStyle(item.iconColor)
-                                Text(item.name)
+                            .contextMenu {
+                                fileContextMenu(for: item)
                             }
-                            .padding(4)
-                            .background(.ultraThinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                            .draggable(item.url) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: item.icon)
+                                        .foregroundStyle(item.iconColor)
+                                    Text(item.name)
+                                }
+                                .padding(4)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
+                            Divider()
                         }
-                        Divider()
+                    }
+                }
+            }
+            .onChange(of: pane.selectedItems) { _, newSelection in
+                if let selectedId = newSelection.first {
+                    withAnimation(.easeOut(duration: 0.15)) {
+                        proxy.scrollTo(selectedId, anchor: .center)
                     }
                 }
             }
