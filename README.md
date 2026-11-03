@@ -16,28 +16,39 @@ Ein qDir-ähnlicher Dateibrowser für macOS mit bis zu 4 nebeneinander angeordne
 ## Voraussetzungen
 
 - macOS 14.0 (Sonoma) oder neuer
-- Xcode 15+ oder Swift Toolchain
+- **Xcode 15+ installiert** (nicht nur Command Line Tools!)
+
+### Wichtig: Xcode als aktive Toolchain
+
+SwiftUI-Makros (`@State`, `@Observable`, …) benötigen das `SwiftUIMacros`-Plugin, das nur in **Xcode** (nicht in den Command Line Tools) enthalten ist. Falls `swift run` mit „plugin for module 'SwiftUIMacros' not found" fehlschlägt, Xcode als aktive Developer-Tools wählen:
+
+```bash
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+xcodebuild -runFirstLaunch   # beim ersten Mal Xcode starten, damit Lizenzen akzeptiert werden
+```
+
+Danach prüfen: `xcode-select -p` muss auf `/Applications/Xcode.app/Contents/Developer` zeigen.
 
 ## Installation & Start
 
 ### Option 1: Mit Swift Package Manager (Terminal)
 
 ```bash
-cd QDirMac
-swift run QDirMac
+cd macDir
+swift run QDirMac        # Name des Executable-Targets: QDirMac (Groß-/Kleinschreibung beachten)
 ```
 
-### Option 2: In Xcode öffnen
+### Option 2: In Xcode öffnen (empfohlen)
 
 1. Xcode öffnen
-2. "Open a project or file..." wählen
-3. Den Ordner `QDirMac` auswählen (die Package.swift wird erkannt)
+2. „Open a project or file..." wählen
+3. Den Repo-Ordner `macDir` auswählen (die Package.swift wird erkannt)
 4. Run drücken (Cmd+R)
 
 ### Option 3: Als .app exportieren
 
 ```bash
-cd QDirMac
+cd macDir
 swift build -c release
 # Die App liegt dann in .build/release/QDirMac
 ```
