@@ -9,7 +9,6 @@ struct FilePaneView: View {
     let onOpenPane: (Int) -> Void
 
     @State private var isTargeted = false
-    @State private var columnWidths: [CGFloat] = [280, 90, 150, 100]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -156,34 +155,50 @@ struct FilePaneView: View {
 
     private var columnHeader: some View {
         HStack(spacing: 0) {
-            ForEach(Array(SortColumn.allCases.enumerated()), id: \.element) { index, column in
-                Button(action: {
-                    if pane.sortColumn == column {
-                        pane.sortOrder = pane.sortOrder == .ascending ? .descending : .ascending
-                    } else {
-                        pane.sortColumn = column
-                        pane.sortOrder = .ascending
-                    }
-                }) {
-                    HStack(spacing: 4) {
-                        Text(column.rawValue)
-                        if pane.sortColumn == column {
-                            Image(systemName: pane.sortOrder == .ascending ? "chevron.up" : "chevron.down")
-                                .font(.system(size: 8))
-                        }
-                    }
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(pane.sortColumn == column ? .primary : .secondary)
-                    .frame(width: columnWidths[index], alignment: .leading)
-                    .padding(.leading, 8)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+            Button(action: { toggleSort(.name) }) {
+                headerLabel(.name, flexible: true)
             }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.size) }) {
+                headerLabel(.size, width: 80, alignment: .trailing)
+            }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.date) }) {
+                headerLabel(.date, width: 140)
+            }
+            .buttonStyle(.plain)
+            Button(action: { toggleSort(.kind) }) {
+                headerLabel(.kind, width: 90)
+            }
+            .buttonStyle(.plain)
         }
         .padding(.vertical, 4)
         .background(Color(nsColor: .windowBackgroundColor))
+    }
+
+    private func toggleSort(_ column: SortColumn) {
+        if pane.sortColumn == column {
+            pane.sortOrder = pane.sortOrder == .ascending ? .descending : .ascending
+        } else {
+            pane.sortColumn = column
+            pane.sortOrder = .ascending
+        }
+    }
+
+    private func headerLabel(_ column: SortColumn, width: CGFloat? = nil, flexible: Bool = false, alignment: Alignment = .leading) -> some View {
+        HStack(spacing: 4) {
+            Text(column.rawValue)
+            if pane.sortColumn == column {
+                Image(systemName: pane.sortOrder == .ascending ? "chevron.up" : "chevron.down")
+                    .font(.system(size: 8))
+            }
+        }
+        .font(.caption)
+        .fontWeight(.semibold)
+        .foregroundStyle(pane.sortColumn == column ? .primary : .secondary)
+        .frame(minWidth: width ?? 120, maxWidth: flexible ? .infinity : width, alignment: alignment)
+        .padding(.leading, 8)
+        .contentShape(Rectangle())
     }
 
     private var emptyState: some View {

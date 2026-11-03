@@ -7,7 +7,7 @@ struct QDirMacApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 800, minHeight: 500)
+                .frame(minWidth: 480, minHeight: 320)
         }
         .commands {
             CommandGroup(replacing: .newItem) {

@@ -112,20 +112,22 @@ struct MultiPaneView: View {
     }
 
     private var panesView: some View {
-        HStack(spacing: 0) {
-            ForEach(Array(panes.enumerated()), id: \.element.id) { index, pane in
-                FilePaneView(
-                    pane: pane,
-                    paneIndex: index,
-                    totalPanes: panes.count,
-                    onDrop: { items, targetPane in
-                        drop(items: items, into: targetPane)
-                    },
-                    onOpenPane: { _ in }
-                )
-                .frame(minWidth: 200)
-                if index < panes.count - 1 {
-                    Divider()
+        ScrollView(.horizontal, showsIndicators: true) {
+            HStack(spacing: 0) {
+                ForEach(Array(panes.enumerated()), id: \.element.id) { index, pane in
+                    FilePaneView(
+                        pane: pane,
+                        paneIndex: index,
+                        totalPanes: panes.count,
+                        onDrop: { items, targetPane in
+                            drop(items: items, into: targetPane)
+                        },
+                        onOpenPane: { _ in }
+                    )
+                    .frame(minWidth: 320)
+                    if index < panes.count - 1 {
+                        Divider()
+                    }
                 }
             }
         }
